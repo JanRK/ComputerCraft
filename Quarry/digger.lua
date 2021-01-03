@@ -221,10 +221,13 @@ end
 function pauseOnRedstone()
     if redstone.getInput("back") then
         print("Redstone detected, sleeping...")
-    end
 
-    while redstone.getInput("back") do
-        sleep(5)
+        while redstone.getInput("back") do
+            sleep(5)
+        end
+
+        shell.run ("refuel all")
+        emptyInventory()
     end
 end
 
