@@ -219,6 +219,10 @@ function emptyInventory()
 end
 
 function pauseOnRedstone()
+    if redstone.getInput("back") then
+        print("Redstone detected, sleeping...")
+    end
+
     while redstone.getInput("back") do
         sleep(5)
     end
