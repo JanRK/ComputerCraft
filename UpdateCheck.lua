@@ -1,5 +1,5 @@
-local UpdateFile = "localVersion"
-local StartupFile ="startup.lua"
+local UpdateFile = "/localVersion"
+local StartupFile ="/startup.lua"
 
 function setLocalVersion(sha)
     if (fs.exists(UpdateFile)) then
