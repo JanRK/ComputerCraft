@@ -1,3 +1,5 @@
+-- pastebin run 55aPr7CG
+
 local UpdateFile = "/localVersion"
 local StartupFile ="/startup.lua"
 
