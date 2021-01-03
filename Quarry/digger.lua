@@ -215,6 +215,13 @@ function emptyInventory()
         turtle.select(i)
         turtle.dropUp()
     end
+    pauseOnRedstone()
+end
+
+function pauseOnRedstone()
+    while redstone.getInput("back") do
+        sleep(5)
+    end
 end
 
 -- Getting coordinates for home
@@ -228,6 +235,12 @@ if startX == 0 then
         end
     end
 end
+
+
+-- Going to start, go check if turtles need to stop/update/refuel.
+goToHome()
+emptyInventory()
+
 
 -- Checking if we are ready!
 fuellevel()
