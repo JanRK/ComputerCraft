@@ -1,5 +1,5 @@
 function getHomeCoords()
-    os.loadAPI('/configuration')
+    os.loadAPI('/jk/Quarry/configuration')
     local startGPS = configuration.new('Location', '/', 'Location information used by turtle')
     -- local exampleString = hidden:getString('exampleStr', 'category', 'defaultValue', 'Element Comments', {'validValues', 'defaultValue'})
     -- Configuration:getNumber(name, category, defaultValue, comment, min, max)
@@ -9,7 +9,7 @@ function getHomeCoords()
     if startX == 0 then
         if startY == 0 then
             if startZ == 0 then
-                shell.run ("SetStart.lua")
+                shell.run ("/jk/Quarry/SetStart.lua")
             end
         end
     end
@@ -230,7 +230,7 @@ if startX == 0 then
     if startY == 0 then
         if startZ == 0 then
             print("Start coords not found, running SetStart.lua")
-            shell.run ("SetStart.lua")
+            shell.run ("/jk/Quarry/SetStart.lua")
             getHomeCoords()
         end
     end

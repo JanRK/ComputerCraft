@@ -1,4 +1,4 @@
-os.loadAPI('/configuration')
+os.loadAPI('/jk/Quarry/configuration')
 
 start_x, start_y, start_z = gps.locate(3)
 local startGPS = configuration.new('Location', '/', 'Location information used by turtle')
