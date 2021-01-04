@@ -85,7 +85,7 @@ while(true) do
                         end
                     end
 
-                    if AlreadyCrafting == false do
+                    if AlreadyCrafting == false then
                         print("Crafting: " .. toCraft, craft["fullName"] .. "\n")
                         rs.scheduleTask(a, toCraft)
                     else
