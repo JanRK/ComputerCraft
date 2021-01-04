@@ -73,7 +73,7 @@ else
     elseif userInput == "Powermon" then
         startupCommand = 'shell.run("jk/Powermon/powermon.lua")'
     elseif userInput == "RSAutoCraft" then
-        startupCommand = 'shell.run("jk/RefinedStorage/Autocraft.lua")'
+        startupCommand = 'shell.run("jk/RefinedStorage/Autocraft.lua /CraftList")'
     else
         startupCommand = 'print("Welcome")'
     end
