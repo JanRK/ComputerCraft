@@ -57,7 +57,7 @@ if startupExists then
 else
     print("Enter Startup Program")
     print("Digger,Powermon,Nothing")
-    local userInput = read("*")
+    local userInput = read()
 
     if userInput == "Digger" then
         startupCommand = 'shell.run("jk/Quarry/digger.lua")'
