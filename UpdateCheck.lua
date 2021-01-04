@@ -50,7 +50,12 @@ if NeedsUpdate then
     if (not fs.exists("/github")) then
         shell.run("pastebin run p8PJVxC4")
     end
-    shell.run("/github clone JanRK/ComputerCraft jk")
+    cloneTry = shell.run("/github clone JanRK/ComputerCraft jk")
+    if cloneTry == false then
+        print("Github rate limit, sleeping!")
+        sleep(math.random(60,120))
+        os.reboot()
+    end
     setLocalVersion(lastCommitSHA)
 end
 
@@ -67,11 +72,15 @@ else
         startupCommand = 'shell.run("jk/Quarry/digger.lua")'
     elseif userInput == "Powermon" then
         startupCommand = 'shell.run("jk/Powermon/powermon.lua")'
-    elseif userInput == "Nothing" then
+    else
         startupCommand = 'print("Welcome")'
     end
 
     local setStartupFile = fs.open(StartupFile, "w" )
+    setStartupFile.write('if redstone.getInput("back") then\n')
+    setStartupFile.write('sleep(math.random(1,60))\n')
+    setStartupFile.write('shell.run("pastebin run 55aPr7CG")\n')
+    setStartupFile.write('end\n')
     setStartupFile.write(startupCommand)
     setStartupFile.close()
 end
