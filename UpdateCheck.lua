@@ -21,7 +21,7 @@ end
 
 local lastCommit = textutils.unserialiseJSON(http.get("https://api.github.com/repos/JanRK/ComputerCraft/git/refs/heads/master").readAll())
 local lastCommitSHA = lastCommit["object"]["sha"]
--- print(lastCommitSHA)
+print("Latest commit SHA " .. lastCommitSHA)
 local updateFileExists = testFileExists(UpdateFile)
 -- print(needsUpdate)
 
@@ -29,31 +29,35 @@ if updateFileExists then
     local versionInFile = fs.open(UpdateFile, "r" )
     local versionFromFile = versionInFile.readLine()
     versionInFile.close()
-    -- print("Progress in file is "..tostring(versionFromFile))
+    print("Local commit SHA is "..tostring(versionFromFile))
     if versionFromFile == lastCommitSHA then
         local commitInfo = textutils.unserialiseJSON(http.get(lastCommit["object"]["url"]).readAll())
         local commitInfoName = commitInfo["committer"]["name"]
         local commitInfoDate = commitInfo["committer"]["date"]
         print( "Already on latest commit! " .. commitInfoName .. " " .. commitInfoDate )
         NeedsUpdate = false
+    else
+        print("New commit found.")
+        NeedsUpdate = true
     end
 else
-    print("update time")
+    print("No update file found!")
     NeedsUpdate = true
 end
 
 if NeedsUpdate then
-    if (not fs.exists("github")) then
+    print("Running update!")
+    if (not fs.exists("/github")) then
         shell.run("pastebin run p8PJVxC4")
     end
-    shell.run("github clone JanRK/ComputerCraft jk")
+    shell.run("/github clone JanRK/ComputerCraft jk")
     setLocalVersion(lastCommitSHA)
 end
 
 
 local startupExists = testFileExists("startup.lua")
 if startupExists then
-    -- print("Update Done")
+    print("Update Done")
 else
     print("Enter Startup Program")
     print("Digger,Powermon,Nothing")
