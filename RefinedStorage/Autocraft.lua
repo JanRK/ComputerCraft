@@ -80,7 +80,7 @@ while(true) do
                     for k,v in pairs(currentTasks) do
                         -- print(v.stack.item.name)
                         if v.stack.item.name == craft["fullName"] then
-                            print(v.stack.item.name)
+                            -- print(v.stack.item.name)
                             AlreadyCrafting = true
                         end
                     end
@@ -89,7 +89,7 @@ while(true) do
                         print("Crafting: " .. toCraft, craft["fullName"] .. "\n")
                         rs.scheduleTask(a, toCraft)
                     else
-                        print("Skipping crafting: " .. craft["fullName"] .. "\n")
+                        print(craft["fullName"] .. " already crafting, skipping " .. "\n")
                     end
                 end
             end
