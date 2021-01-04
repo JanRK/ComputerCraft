@@ -65,13 +65,15 @@ if startupExists then
     print("Update Done")
 else
     print("Enter Startup Program")
-    print("Digger,Powermon,Nothing")
+    print("Digger,Powermon,RSAutoCraft,Nothing")
     local userInput = read()
 
     if userInput == "Digger" then
         startupCommand = 'shell.run("jk/Quarry/digger.lua")'
     elseif userInput == "Powermon" then
         startupCommand = 'shell.run("jk/Powermon/powermon.lua")'
+    elseif userInput == "RSAutoCraft" then
+        startupCommand = 'shell.run("jk/RefinedStorage/Autocraft.lua")'
     else
         startupCommand = 'print("Welcome")'
     end
