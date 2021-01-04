@@ -244,6 +244,9 @@ if startX == 0 then
 end
 
 
+-- Sleep 30 secs to make sure GPS are ready
+sleep(30)
+
 -- Going to start, go check if turtles need to stop/update/refuel.
 goToHome()
 emptyInventory()
