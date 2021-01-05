@@ -167,6 +167,7 @@ function refuel()
         error()
     end
     print("Refuel done, fuel level is " .. tostring(turtle.getFuelLevel()))
+    emptyInventory()
 end
 
 -- fuellevel()
