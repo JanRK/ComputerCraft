@@ -3,6 +3,9 @@
 local UpdateFile = "/localVersion"
 local StartupFile ="/startup.lua"
 
+-- settings.set("motd.enable",false) -- Not working?
+shell.run("set motd.enable false")
+
 function setLocalVersion(sha)
     if (fs.exists(UpdateFile)) then
         fs.delete(UpdateFile)
