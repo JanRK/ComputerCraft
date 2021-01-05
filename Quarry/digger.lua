@@ -116,12 +116,13 @@ function fuellevel()
         print("Fuel Level: Unlimited")
         return true
     end
-        if fuel > 5000 then
+    if fuel > 5000 then
         -- print("Fuel Level: "..tostring(fuel))
         return true
     else
         print("Fuel Level: Low")
-        print("Going home - Please refuel Turtle!!")
+        print("Fuel level is " .. tostring(turtle.getFuelLevel()))
+        print("Going home to refuel Turtle!!")
         refuel()
         -- error()
         return false
