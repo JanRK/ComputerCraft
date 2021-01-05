@@ -53,6 +53,16 @@ if NeedsUpdate then
     if (not fs.exists("/github")) then
         shell.run("pastebin run p8PJVxC4")
     end
+
+    -- Try to fix Github Rate limit
+    local rateLimeted = 0
+    while (textutils.unserialiseJSON(http.get("https://api.github.com/rate_limit").readAll())).rate.limit < 30 do
+        rateLimeted = rateLimeted + 1
+        term.setCursorPos(1,13)
+        print("Waiting for ratelimit. Waited for " .. rateLimeted .. " minutes.")
+        sleep(math.random(60,120))
+    end
+
     cloneTry = shell.run("/github clone JanRK/ComputerCraft jk")
     if cloneTry == false then
         print("Github rate limit, sleeping!")
