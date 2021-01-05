@@ -22,6 +22,25 @@ function testFileExists(filename)
     return false
 end
 
+-- Try to fix Github Rate limit
+local rateLimited = 0
+local waitForRateLimit = true
+while waitForRateLimit == true do
+    local checkRateLimit = http.get("https://api.github.com/rate_limit").readAll()
+    if checkRateLimit then
+        local currentRateLimit = textutils.unserialiseJSON(checkRateLimit).rate.limit
+        print("Rate limit is at " .. currentRateLimit)
+        if currentRateLimit < 30 then
+            sleep(math.random(60,120))
+        else
+            waitForRateLimit = false
+        end
+    else
+        print("Rate limit is unavailiable!?")
+        sleep(math.random(60,120))
+    end
+end
+
 local lastCommit = textutils.unserialiseJSON(http.get("https://api.github.com/repos/JanRK/ComputerCraft/git/refs/heads/master").readAll())
 local lastCommitSHA = lastCommit["object"]["sha"]
 print("Latest commit SHA " .. lastCommitSHA)
@@ -54,19 +73,10 @@ if NeedsUpdate then
         shell.run("pastebin run p8PJVxC4")
     end
 
-    -- Try to fix Github Rate limit
-    local rateLimeted = 0
-    while (textutils.unserialiseJSON(http.get("https://api.github.com/rate_limit").readAll())).rate.limit < 30 do
-        rateLimeted = rateLimeted + 1
-        term.setCursorPos(1,13)
-        print("Waiting for ratelimit. Waited for " .. rateLimeted .. " minutes.")
-        sleep(math.random(60,120))
-    end
-
     cloneTry = shell.run("/github clone JanRK/ComputerCraft jk")
     if cloneTry == false then
-        print("Github rate limit, sleeping!")
-        sleep(math.random(60,120))
+        print("Github rate limit, retrying!")
+        sleep(math.random(60,180))
         os.reboot()
     end
     setLocalVersion(lastCommitSHA)
