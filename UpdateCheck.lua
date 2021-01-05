@@ -82,11 +82,11 @@ else
     local userInput = read()
 
     if userInput == "Digger" then
-        startupCommand = 'shell.run("jk/Quarry/digger.lua")'
+        startupCommand = 'shell.run("fg jk/Quarry/digger.lua")'
     elseif userInput == "Powermon" then
-        startupCommand = 'shell.run("jk/Powermon/powermon.lua")'
+        startupCommand = 'shell.run("fg jk/Powermon/powermon.lua")'
     elseif userInput == "RSAutoCraft" then
-        startupCommand = 'shell.run("jk/RefinedStorage/Autocraft.lua /CraftList")'
+        startupCommand = 'shell.run("fg jk/RefinedStorage/Autocraft.lua /CraftList")'
     else
         startupCommand = 'print("Welcome")'
     end
