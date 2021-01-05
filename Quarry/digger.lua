@@ -116,16 +116,45 @@ function fuellevel()
         print("Fuel Level: Unlimited")
         return true
     end
-        if fuel > 500 then
+        if fuel > 5000 then
         -- print("Fuel Level: "..tostring(fuel))
         return true
     else
         print("Fuel Level: Low")
         print("Going home - Please refuel Turtle!!")
-        goToHome()
-        error()
+        refuel()
+        -- error()
         return false
     end
+end
+
+
+function refuel()
+    goToHome()
+    local chest = peripheral.find("minecraft:chest")
+    if chest then
+        while turtle.getFuelLevel() < 900000 do
+            for i = 1,16 do
+                local itemDetail = chest.getItemDetail(i)
+                if itemDetail.name == "mekanism:block_charcoal" then
+                    chest.pullItems(i)
+                end
+            end
+            for i = 1, 16 do
+                turtle.select(i)
+                if turtle.refuel(0) then -- if it's valid fuel
+                    turtle.refuel()
+                end
+            end
+            if turtle.getFuelLevel() < 900000 then
+                sleep(15)
+            end
+        end
+    else
+        print("Chest not found, where am I?")
+        error()
+    end
+    print("Refuel done, fuel level is " .. tostring(turtle.getFuelLevel()))
 end
 
 -- fuellevel()
