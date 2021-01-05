@@ -6,6 +6,17 @@ local StartupFile ="/startup.lua"
 -- settings.set("motd.enable",false) -- Not working?
 shell.run("set motd.enable false")
 
+function countDown(secs)
+    local x,y = term.getCursorPos(x,y)
+    for i = secs,0,-1 do
+        term.setCursorPos(1,y)
+        term.clearLine()
+        term.write(i)
+        sleep(1)
+    end
+    print(" ")
+end
+
 function setLocalVersion(sha)
     if (fs.exists(UpdateFile)) then
         fs.delete(UpdateFile)
@@ -31,13 +42,15 @@ while waitForRateLimit == true do
         local currentRateLimit = textutils.unserialiseJSON(checkRateLimit).rate.limit
         print("Rate limit is at " .. currentRateLimit)
         if currentRateLimit < 30 then
-            sleep(math.random(60,120))
+            local sleepSecs = math.random(60,120)
+            countDown(sleepSecs)
         else
             waitForRateLimit = false
         end
     else
         print("Rate limit is unavailiable!?")
-        sleep(math.random(60,120))
+        local sleepSecs = math.random(60,120)
+        countDown(sleepSecs)
     end
 end
 
@@ -76,12 +89,12 @@ if NeedsUpdate then
     cloneTry = shell.run("/github clone JanRK/ComputerCraft jk")
     if cloneTry == false then
         print("Github rate limit, retrying!")
-        sleep(math.random(60,180))
+        local sleepSecs = math.random(60,180)
+        countDown(sleepSecs)
         os.reboot()
     end
     setLocalVersion(lastCommitSHA)
 end
-
 
 local startupExists = testFileExists("startup.lua")
 if startupExists then
