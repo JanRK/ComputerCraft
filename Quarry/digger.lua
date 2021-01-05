@@ -135,10 +135,21 @@ function refuel()
     local chest = peripheral.find("minecraft:chest")
     if chest then
         while turtle.getFuelLevel() < 900000 do
-            for i = 1,16 do
+            for i = 1,54 do
                 local itemDetail = chest.getItemDetail(i)
-                if itemDetail.name == "mekanism:block_charcoal" then
-                    chest.pullItems(i)
+                if itemDetail then
+                    if i == 1 then
+                        if itemDetail.name == "mekanism:block_charcoal" then
+                            turtle.suckUp()
+                            -- chest.pullItems(i)
+                        else
+                            chest.pullItems("top",i,itemDetail.count,54)
+                        end
+                    else
+                        if itemDetail.name == "mekanism:block_charcoal" then
+                            chest.pullItems("top",i,itemDetail.count,1)
+                        end
+                    end
                 end
             end
             for i = 1, 16 do
@@ -147,7 +158,7 @@ function refuel()
                     turtle.refuel()
                 end
             end
-            if turtle.getFuelLevel() < 900000 then
+            if turtle.getFuelLevel() < 90000 then
                 sleep(15)
             end
         end
