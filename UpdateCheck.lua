@@ -39,7 +39,7 @@ local waitForRateLimit = true
 while waitForRateLimit == true do
     local checkRateLimit = http.get("https://api.github.com/rate_limit").readAll()
     if checkRateLimit then
-        local currentRateLimit = textutils.unserialiseJSON(checkRateLimit).rate.limit
+        local currentRateLimit = textutils.unserialiseJSON(checkRateLimit).rate.remaining
         print("Rate limit is at " .. currentRateLimit)
         if currentRateLimit < 30 then
             local sleepSecs = math.random(60,120)
