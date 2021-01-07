@@ -19,7 +19,6 @@ end
 
 function setProgress()
     -- Sleeping, seems chunk unloading messes up this file, hopefully sleep fixes it
-    sleep(10)
     location()
     -- print("Setting progress to "..tostring(x))
     fs.delete("progress")
@@ -33,6 +32,7 @@ function getProgress()
     local progressFromFile = progressInFile.readLine()
     progressInFile.close()
     -- print("Progress in file is "..tostring(progressFromFile))
+    location()
     disProgress = x - progressFromFile
     return progressFromFile
 end
@@ -200,10 +200,13 @@ function goToHome()
 end
 
 function goToProgress()
-    location()
     getProgress()
     gotoYLevel(disy)
     gotoXLevel(disProgress)
+    for i = 1,2 do
+        digForward()
+        turtle.forward()
+    end
 end
 
 function location()
@@ -301,18 +304,18 @@ emptyInventory()
 fuellevel()
 checkIfInvIsFull()
 location()
-getProgress()
-gotoYLevel(disy)
-gotoXLevel(disProgress)
+goToProgress()
 
 while true do
-    while goDown() do end
-    location()
-    gotoYLevel(disy)
     for i = 1,2 do
         digForward()
         turtle.forward()
     end
+
+    while goDown() do end
+
+    location()
+    gotoYLevel(disy)
     setProgress()
     fuellevel()
     -- getProgress()
