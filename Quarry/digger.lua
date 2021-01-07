@@ -137,7 +137,8 @@ function refuel()
     local chest = peripheral.find("minecraft:chest")
     if chest then
         while turtle.getFuelLevel() < 90000 do
-            for i = 1,54 do
+            local chestSize = chest.size()
+            for i = 1,chestSize do
                 local itemDetail = chest.getItemDetail(i)
                 if itemDetail then
                     if i == 1 then
