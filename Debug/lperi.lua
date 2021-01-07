@@ -8,4 +8,5 @@ for i in ipairs(periList) do
 	for i,v in ipairs(peripheral.getMethods(periSide)) do 
 		print(i..". "..v) 
 	end
+	read()
 end
