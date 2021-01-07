@@ -18,6 +18,8 @@ function getHomeCoords()
 end
 
 function setProgress()
+    -- Sleeping, seems chunk unloading messes up this file, hopefully sleep fixes it
+    sleep(10)
     location()
     -- print("Setting progress to "..tostring(x))
     fs.delete("progress")
