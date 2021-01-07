@@ -33,6 +33,25 @@ function testFileExists(filename)
     return false
 end
 
+
+
+local computerName = os.getComputerLabel()
+if (not computerName) then
+    print("No name detected, type new name:")
+    newComputerName = read()
+    shell.run("label set " .. newComputerName)
+    local nameFile = "/host.lua"
+    local nameFileExists = testFileExists(nameFile)
+    if nameFileExists then
+        fs.delete(nameFile)
+    end
+    local setNameFile = fs.open(nameFile, "w" )
+    setNameFile.write(newComputerName)
+    setNameFile.close()
+end
+
+
+
 -- Try to fix Github Rate limit
 local rateLimited = 0
 local waitForRateLimit = true
