@@ -1,7 +1,8 @@
 -- pastebin run 55aPr7CG
 
 local UpdateFile = "/localVersion"
-local StartupFile ="/startup.lua"
+local StartupFile = "/startup.lua"
+local startProgram = "/startProgram.lua"
 
 -- settings.set("motd.enable",false) -- Not working?
 shell.run("set motd.enable false")
@@ -120,8 +121,21 @@ else
     end
 end
 
-local startupExists = testFileExists("startup.lua")
+local startupExists = testFileExists(StartupFile)
 if startupExists then
+    fs.delete(StartupFile)
+end
+local setStartupFile = fs.open(StartupFile, "w" )
+setStartupFile.write('if redstone.getInput("back") then\n')
+setStartupFile.write('shell.run("/jk/SharedFunctions countDown " .. math.random(1,60))\n')
+setStartupFile.write('shell.run("pastebin run 55aPr7CG")\n')
+setStartupFile.write('end\n')
+setStartupFile.write('shell.run("/startProgram.lua")\n')
+setStartupFile.close()
+
+
+local startProgramExists = testFileExists(startProgram)
+if startProgramExists then
     print("Update Done")
 else
     print("Enter Startup Program")
@@ -129,20 +143,16 @@ else
     local userInput = read()
 
     if userInput == "Digger" then
-        startupCommand = 'shell.run("fg jk/Quarry/digger.lua")'
+        startupCommand = 'shell.run("fg /jk/Quarry/digger.lua")'
     elseif userInput == "Powermon" then
-        startupCommand = 'shell.run("fg jk/Powermon/powermon.lua")'
+        startupCommand = 'shell.run("fg /jk/Powermon/powermon.lua")'
     elseif userInput == "RSAutoCraft" then
-        startupCommand = 'shell.run("fg jk/RefinedStorage/Autocraft.lua /CraftList")'
+        startupCommand = 'shell.run("fg /jk/RefinedStorage/Autocraft.lua /CraftList")'
     else
         startupCommand = 'print("Welcome")'
     end
 
-    local setStartupFile = fs.open(StartupFile, "w" )
-    setStartupFile.write('if redstone.getInput("back") then\n')
-    setStartupFile.write('shell.run("jk/SharedFunctions countDown " .. math.random(1,60))\n')
-    setStartupFile.write('shell.run("pastebin run 55aPr7CG")\n')
-    setStartupFile.write('end\n')
-    setStartupFile.write(startupCommand)
-    setStartupFile.close()
+    local setStartProgramFile = fs.open(startProgram, "w" )
+    setStartProgramFile.write(startupCommand)
+    setStartProgramFile.close()
 end
