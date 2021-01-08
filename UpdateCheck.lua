@@ -140,7 +140,7 @@ else
 
     local setStartupFile = fs.open(StartupFile, "w" )
     setStartupFile.write('if redstone.getInput("back") then\n')
-    setStartupFile.write('sleep(math.random(1,60))\n')
+    setStartupFile.write('shell.run("jk/SharedFunctions countDown " .. math.random(1,60))\n')
     setStartupFile.write('shell.run("pastebin run 55aPr7CG")\n')
     setStartupFile.write('end\n')
     setStartupFile.write(startupCommand)
