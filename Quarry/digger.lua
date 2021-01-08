@@ -285,7 +285,7 @@ end
 function pauseOnRedstone()
     if redstone.getInput("back") then
         print("Redstone detected, sleeping...")
-
+        reportRednet("PauseOnRedstone")
         while redstone.getInput("back") do
             sleep(5)
         end
@@ -325,7 +325,7 @@ while true do
     end
 
     while goDown() do end
-
+    reportRednet("HitBedrock")
     location()
     gotoYLevel(disy)
     setProgress()
