@@ -44,7 +44,8 @@ elseif rednetRole == "client" then
             messageToSend = {
                 Function = "Miner",
                 MiningProgress = progressFromFile,
-                Fuel = tostring(turtle.getFuelLevel())
+                Fuel = tostring(turtle.getFuelLevel()),
+                Order = args[3]
             }
     end
 
