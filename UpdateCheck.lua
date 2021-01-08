@@ -73,46 +73,51 @@ while waitForRateLimit == true do
     end
 end
 
-local lastCommit = textutils.unserialiseJSON(http.get("https://api.github.com/repos/JanRK/ComputerCraft/git/refs/heads/master").readAll())
-local lastCommitSHA = lastCommit["object"]["sha"]
-print("Latest commit SHA " .. lastCommitSHA)
-local updateFileExists = testFileExists(UpdateFile)
--- print(needsUpdate)
+local manuelUpdating = testFileExists("/manualupdate.lua")
+if manuelUpdating then
+    print("Not updating from GitHub, since /manualupdate.lua exists!")
+else
+    local lastCommit = textutils.unserialiseJSON(http.get("https://api.github.com/repos/JanRK/ComputerCraft/git/refs/heads/master").readAll())
+    local lastCommitSHA = lastCommit["object"]["sha"]
+    print("Latest commit SHA " .. lastCommitSHA)
+    local updateFileExists = testFileExists(UpdateFile)
+    -- print(needsUpdate)
 
-if updateFileExists then
-    local versionInFile = fs.open(UpdateFile, "r" )
-    local versionFromFile = versionInFile.readLine()
-    versionInFile.close()
-    print("Local commit SHA is "..tostring(versionFromFile))
-    if versionFromFile == lastCommitSHA then
-        local commitInfo = textutils.unserialiseJSON(http.get(lastCommit["object"]["url"]).readAll())
-        local commitInfoName = commitInfo["committer"]["name"]
-        local commitInfoDate = commitInfo["committer"]["date"]
-        print( "Already on latest commit! " .. commitInfoName .. " " .. commitInfoDate )
-        NeedsUpdate = false
+    if updateFileExists then
+        local versionInFile = fs.open(UpdateFile, "r" )
+        local versionFromFile = versionInFile.readLine()
+        versionInFile.close()
+        print("Local commit SHA is "..tostring(versionFromFile))
+        if versionFromFile == lastCommitSHA then
+            local commitInfo = textutils.unserialiseJSON(http.get(lastCommit["object"]["url"]).readAll())
+            local commitInfoName = commitInfo["committer"]["name"]
+            local commitInfoDate = commitInfo["committer"]["date"]
+            print( "Already on latest commit! " .. commitInfoName .. " " .. commitInfoDate )
+            NeedsUpdate = false
+        else
+            print("New commit found.")
+            NeedsUpdate = true
+        end
     else
-        print("New commit found.")
+        print("No update file found!")
         NeedsUpdate = true
     end
-else
-    print("No update file found!")
-    NeedsUpdate = true
-end
 
-if NeedsUpdate then
-    print("Running update!")
-    if (not fs.exists("/github")) then
-        shell.run("pastebin run p8PJVxC4")
-    end
+    if NeedsUpdate then
+        print("Running update!")
+        if (not fs.exists("/github")) then
+            shell.run("pastebin run p8PJVxC4")
+        end
 
-    cloneTry = shell.run("/github clone JanRK/ComputerCraft jk")
-    if cloneTry == false then
-        print("Github rate limit, retrying!")
-        local sleepSecs = math.random(60,180)
-        countDown(sleepSecs)
-        os.reboot()
+        cloneTry = shell.run("/github clone JanRK/ComputerCraft jk")
+        if cloneTry == false then
+            print("Github rate limit, retrying!")
+            local sleepSecs = math.random(60,180)
+            countDown(sleepSecs)
+            os.reboot()
+        end
+        setLocalVersion(lastCommitSHA)
     end
-    setLocalVersion(lastCommitSHA)
 end
 
 local startupExists = testFileExists("startup.lua")
