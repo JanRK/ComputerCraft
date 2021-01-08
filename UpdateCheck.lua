@@ -128,7 +128,11 @@ end
 local setStartupFile = fs.open(StartupFile, "w" )
 setStartupFile.write('if redstone.getInput("back") then\n')
 setStartupFile.write('shell.run("/jk/SharedFunctions countDown " .. math.random(1,60))\n')
-setStartupFile.write('shell.run("pastebin run 55aPr7CG")\n')
+if manuelUpdating then
+    setStartupFile.write('shell.run("/jk/UpdateCheck.lua")\n')
+else
+    setStartupFile.write('shell.run("pastebin run 55aPr7CG")\n')
+end
 setStartupFile.write('end\n')
 setStartupFile.write('shell.run("/startProgram.lua")\n')
 setStartupFile.close()
