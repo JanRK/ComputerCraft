@@ -87,7 +87,7 @@ function goDown()
             end
             print("Attacking something")
         elseif turtle.getFuelLevel() == 0 then --# it couldn't move because of no fuel
-            print("fuel")
+            print("No fuel!")
             return false
         end
     end
