@@ -17,6 +17,10 @@ function getHomeCoords()
     os.unloadAPI('configuration')
 end
 
+function reportRednet(rednetMessage)
+    shell.run("/jk/Rednet/rednet.lua client miner " .. rednetMessage)
+end
+
 function setProgress()
     location()
     -- print("Setting progress to "..tostring(x))
@@ -124,6 +128,7 @@ function fuellevel()
         print("Fuel Level: Low")
         print("Fuel level is " .. tostring(turtle.getFuelLevel()))
         print("Going home to refuel Turtle!!")
+        reportRednet("GoRefuel")
         refuel()
         -- error()
         return false
@@ -166,6 +171,7 @@ function refuel()
         end
     else
         print("Chest not found, where am I?")
+        reportRednet("WTFAmI")
         error()
     end
     print("Refuel done, fuel level is " .. tostring(turtle.getFuelLevel()))
@@ -186,6 +192,7 @@ end
 function checkIfInvIsFull()
     if isInvFull() then
         print("Inventory full, returning to empty chest.")
+        reportRednet("GoEmptyInv")
         goToHome()
         emptyInventory()
         goToProgress()
@@ -199,6 +206,7 @@ function goToHome()
 end
 
 function goToProgress()
+    reportRednet("ReturnToMine")
     getProgress()
     gotoYLevel(disy)
     gotoXLevel(disProgress)
@@ -211,7 +219,16 @@ end
 function location()
     -- Getting current location
     -- Original x (ox)...
-    x, y, z = gps.locate(3)
+    x, y, z = gps.locate(5)
+    if not x then
+        print("Sleep to make sure GPS are ready")
+        reportRednet("GPSNotFound")
+        while not x do
+            shell.run("/jk/SharedFunctions countDown " .. math.random(10,20))
+            x, y, z = gps.locate(5)
+        end
+    end
+
     -- Solving for distance by subtracting new location from current location
     -- Distance x (disx)...
     disx = x - startX
@@ -290,9 +307,6 @@ if startX == 0 then
     end
 end
 
-
-print("Sleep to make sure GPS are ready")
-shell.run("/jk/SharedFunctions countDown " .. math.random(20,40))
 -- Going to start, go check if turtles need to stop/update/refuel.
 goToHome()
 emptyInventory()
