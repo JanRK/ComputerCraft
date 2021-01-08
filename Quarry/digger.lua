@@ -18,7 +18,6 @@ function getHomeCoords()
 end
 
 function setProgress()
-    -- Sleeping, seems chunk unloading messes up this file, hopefully sleep fixes it
     location()
     -- print("Setting progress to "..tostring(x))
     fs.delete("progress")
@@ -162,7 +161,7 @@ function refuel()
                 end
             end
             if turtle.getFuelLevel() < 90000 then
-                sleep(15)
+                shell.run("/jk/SharedFunctions countDown 15")
             end
         end
     else
@@ -292,9 +291,8 @@ if startX == 0 then
 end
 
 
--- Sleep 30 secs to make sure GPS are ready
-sleep(30)
-
+print("Sleep to make sure GPS are ready")
+shell.run("/jk/SharedFunctions countDown " .. math.random(20,40))
 -- Going to start, go check if turtles need to stop/update/refuel.
 goToHome()
 emptyInventory()
