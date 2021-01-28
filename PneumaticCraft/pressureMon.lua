@@ -66,8 +66,10 @@ while true do
     print("Pressure turns on when under " ..pressureLow)
     if currentTemperature > 330 then
         setRedstone(15)
+        redstone.setAnalogOutput("right",15)
         print("Temperature high!")
         sleep(60)
+        redstone.setAnalogOutput("right",0)
     elseif (tonumber(currentPressure) > tonumber(pressureHigh)) then
         setRedstone(15)
         print("Pressure high!")
