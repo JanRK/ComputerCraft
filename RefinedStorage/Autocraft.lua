@@ -47,7 +47,7 @@ fileName = args[1]
 
 file_exist(fileName)
 
-local rs = peripheral.find("refinedstorage4computercraft:peripheral")
+local rs = peripheral.find("refinedstorage")
 
 if (not rs) then
     print("[ERROR]: No refined storage Peripheral found. Place computer next to an refinedstorage4computercraft:peripheral.")

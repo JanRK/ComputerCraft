@@ -1,6 +1,8 @@
+local miningProgressFile = "/settings/miningProgress.lua"
+
 function getHomeCoords()
     os.loadAPI('/jk/Quarry/configuration')
-    local startGPS = configuration.new('Location', '/', 'Location information used by turtle')
+    local startGPS = configuration.new('MiningStartLocation', '/settings', 'Location information used by turtle')
     -- local exampleString = hidden:getString('exampleStr', 'category', 'defaultValue', 'Element Comments', {'validValues', 'defaultValue'})
     -- Configuration:getNumber(name, category, defaultValue, comment, min, max)
     startX = startGPS:getNumber('startX', 'coords',0)
@@ -25,14 +27,14 @@ function setProgress()
     location()
     -- print("Setting progress to "..tostring(x))
     fs.delete("progress")
-    local setProgressInFile = fs.open("progress", "w" )
+    local setProgressInFile = fs.open(miningProgressFile, "w" )
     setProgressInFile.write(x)
     setProgressInFile.close()
 end
 
 function getProgress()
-    local progressInFile = fs.open("progress", "r" )
-    local progressFromFile = progressInFile.readLine()
+    local progressInFile = fs.open(miningProgressFile, "r" )
+    local progressFromFile = tonumber(progressInFile.readLine())
     progressInFile.close()
     -- print("Progress in file is "..tostring(progressFromFile))
     location()
@@ -100,8 +102,8 @@ function goDown()
 end
 
 function goUp()
-    -- digForward()
-    -- digUp()
+    digForward()
+    digUp()
     while not turtle.up() do
         if turtle.detectUp() then --# it couldn't move because of a block
         elseif turtle.attackUp() then --# it couldn't move because of a mob
@@ -231,10 +233,10 @@ function location()
 
     -- Solving for distance by subtracting new location from current location
     -- Distance x (disx)...
+    getHomeCoords()
     disx = x - startX
     disy = y - startY
     disz = z - startZ
-    getHomeCoords()
 end
 
 function gotoYLevel(yCoord)

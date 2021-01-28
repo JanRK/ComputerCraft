@@ -53,31 +53,31 @@ end
 
 
 
--- Try to fix Github Rate limit
-local rateLimited = 0
-local waitForRateLimit = true
-while waitForRateLimit == true do
-    local checkRateLimit = http.get("https://api.github.com/rate_limit").readAll()
-    if checkRateLimit then
-        local currentRateLimit = textutils.unserialiseJSON(checkRateLimit).rate.remaining
-        print("Rate limit is at " .. currentRateLimit)
-        if currentRateLimit < 30 then
-            local sleepSecs = math.random(60,120)
-            countDown(sleepSecs)
-        else
-            waitForRateLimit = false
-        end
-    else
-        print("Rate limit is unavailiable!?")
-        local sleepSecs = math.random(60,120)
-        countDown(sleepSecs)
-    end
-end
-
 local manuelUpdating = testFileExists("/manualupdate.lua")
 if manuelUpdating then
     print("Not updating from GitHub, since /manualupdate.lua exists!")
 else
+    -- Try to fix Github Rate limit
+    local rateLimited = 0
+    local waitForRateLimit = true
+    while waitForRateLimit == true do
+        local checkRateLimit = http.get("https://api.github.com/rate_limit").readAll()
+        if checkRateLimit then
+            local currentRateLimit = textutils.unserialiseJSON(checkRateLimit).rate.remaining
+            print("Rate limit is at " .. currentRateLimit)
+            if currentRateLimit < 30 then
+                local sleepSecs = math.random(60,120)
+                countDown(sleepSecs)
+            else
+                waitForRateLimit = false
+            end
+        else
+            print("Rate limit is unavailiable!?")
+            local sleepSecs = math.random(60,120)
+            countDown(sleepSecs)
+        end
+    end
+
     local lastCommit = textutils.unserialiseJSON(http.get("https://api.github.com/repos/JanRK/ComputerCraft/git/refs/heads/master").readAll())
     local lastCommitSHA = lastCommit["object"]["sha"]
     print("Latest commit SHA " .. lastCommitSHA)
@@ -127,7 +127,9 @@ if startupExists then
 end
 local setStartupFile = fs.open(StartupFile, "w" )
 setStartupFile.write('if redstone.getInput("back") then\n')
+setStartupFile.write('if (not fs.exists("/manualupdate.lua")) then\n')
 setStartupFile.write('shell.run("/jk/SharedFunctions countDown " .. math.random(1,60))\n')
+setStartupFile.write('end\n')
 if manuelUpdating then
     setStartupFile.write('shell.run("/jk/UpdateCheck.lua")\n')
 else
@@ -143,15 +145,19 @@ if startProgramExists then
     print("Update Done")
 else
     print("Enter Startup Program")
-    print("Digger,Powermon,RSAutoCraft,Nothing")
+    print("Digger,Powermon,RSAutoCraft,Pressuremon,GPSHost,Nothing")
     local userInput = read()
 
     if userInput == "Digger" then
         startupCommand = 'shell.run("fg /jk/Quarry/digger.lua")'
     elseif userInput == "Powermon" then
         startupCommand = 'shell.run("fg /jk/Powermon/powermon.lua")'
+    elseif userInput == "Pressuremon" then
+        startupCommand = 'shell.run("fg /jk/PneumaticCraft/pressureMon.lua")'
     elseif userInput == "RSAutoCraft" then
         startupCommand = 'shell.run("fg /jk/RefinedStorage/Autocraft.lua /CraftList")'
+    elseif userInput == "GPSHost" then
+        startupCommand = 'shell.run("fg /jk/GPS/gps.lua host")'
     else
         startupCommand = 'print("Welcome")'
     end
@@ -160,3 +166,4 @@ else
     setStartProgramFile.write(startupCommand)
     setStartProgramFile.close()
 end
+
