@@ -1,15 +1,17 @@
 os.loadAPI("/jk/SharedFunctions.lua")
 local settingsFile = "/settings/pressure.lua"
 local settingsFileExists = SharedFunctions.testFileExists(settingsFile)
-local peripheralName = "pneumaticcraft:pressure_tube"
+local peripheralName = {"pneumaticcraft:pressure_tube","pneumaticcraft:advanced_pressure_tube","pneumaticcraft:flux_localPeripheral"}
 
 
 
 local periList = peripheral.getNames()
 for i in ipairs(periList) do
 	local periSide = periList[i]
-    if peripheral.getType(periSide) == peripheralName then
-        compressor = peripheral.wrap(periSide)
+    for key,value in pairs(peripheralName) do
+        if peripheral.getType(periSide) == value then
+            localPeripheral = peripheral.wrap(periSide)
+        end
     end
 end
 
@@ -53,17 +55,22 @@ end
 setRedstone(0)
 
 while true do
-    local currentPressureRaw = compressor.getPressure()
+    local currentPressureRaw = localPeripheral.getPressure()
     local currentPressure = math.floor(currentPressureRaw * 100) / 100
+    local currentTemperature = localPeripheral.getTemperature()
     term.clear()
     term.setCursorPos( 1, 1 )
     print("Pressure Level: " .. currentPressure )
     print(" ")
     print("Pressure turns off when over " ..pressureHigh)
     print("Pressure turns on when under " ..pressureLow)
-    if (tonumber(currentPressure) > tonumber(pressureHigh)) then
-            setRedstone(15)
-            print("Pressure high!")
+    if currentTemperature > 330 then
+        setRedstone(15)
+        print("Temperature high!")
+        sleep(60)
+    elseif (tonumber(currentPressure) > tonumber(pressureHigh)) then
+        setRedstone(15)
+        print("Pressure high!")
     elseif (tonumber(currentPressure) < tonumber(pressureLow)) then
         setRedstone(0)
         print("Pressure low!")
