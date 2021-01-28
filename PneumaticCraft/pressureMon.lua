@@ -46,7 +46,7 @@ local pressureHigh = pressureSettings.pressureHigh
 local pressureLow = pressureSettings.pressureLow
 local sleeptime = tonumber(pressureSettings.sleepTime)
 local redSide = pressureSettings.redSide
-
+local localPeripheral = peripheral.wrap(redSide)
 
 function setRedstone(level)
     redstone.setAnalogOutput(redSide,level)
