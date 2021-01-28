@@ -1,7 +1,7 @@
 os.loadAPI("/jk/SharedFunctions.lua")
 local settingsFile = "/settings/pressure.lua"
 local settingsFileExists = SharedFunctions.testFileExists(settingsFile)
-local peripheralName = {"pneumaticcraft:pressure_tube","pneumaticcraft:advanced_pressure_tube","pneumaticcraft:flux_localPeripheral"}
+local peripheralName = {"pneumaticcraft:pressure_tube","pneumaticcraft:advanced_pressure_tube","pneumaticcraft:flux_compressor"}
 
 
 
