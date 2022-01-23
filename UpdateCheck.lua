@@ -145,7 +145,7 @@ if startProgramExists then
     print("Update Done")
 else
     print("Enter Startup Program")
-    print("Digger,Powermon,RSAutoCraft,Pressuremon,GPSHost,Nothing")
+    print("Digger,MiningWell,Powermon,RSAutoCraft,Pressuremon,GPSHost,Nothing")
     local userInput = read()
 
     if userInput == "Digger" then
