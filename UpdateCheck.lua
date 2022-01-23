@@ -150,6 +150,8 @@ else
 
     if userInput == "Digger" then
         startupCommand = 'shell.run("fg /jk/Quarry/digger.lua")'
+    elseif userInput == "MiningWell" then
+        startupCommand = 'shell.run("fg /jk/MiningWellQuarry/miningWellQuarry.lua")'
     elseif userInput == "Powermon" then
         startupCommand = 'shell.run("fg /jk/Powermon/powermon.lua")'
     elseif userInput == "Pressuremon" then
