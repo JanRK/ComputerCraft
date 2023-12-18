@@ -5,14 +5,15 @@
 -- File example: https://pastebin.com/aYEFe7ic
 --
 -- Needs the following mod, since CC cannot natively talk to RS
--- Refined Storage for ComputerCraft
--- https://github.com/uecasm/rs4cc
+-- Advanced Peripherals
+-- https://www.curseforge.com/minecraft/mc-mods/advanced-peripherals
+-- https://docs.advanced-peripherals.de/peripherals/rs_bridge/
 --
 -- Created by SuperZorro
 -- Inspired and borrowed code from Nyhillius and thraaawn
 
 -- How long to wait between crafts.
-local waittime = 300
+local waittime = 60
 
 
 local function load_file(fileName)
@@ -47,10 +48,23 @@ fileName = args[1]
 
 file_exist(fileName)
 
-local rs = peripheral.find("refinedstorage")
+local rs4cc = peripheral.find("refinedstorage")
+local advperi = peripheral.find("rsBridge")
+
+if (rs4cc) then
+    print("Bridge from Storage for ComputerCraft (rs4cc) found!")
+    print("[ERROR]: This version of the code no longer supports rs4cc, but uses Advanced Peripherals insted.")
+    error()
+    return false
+end
+
+if (advperi) then
+    rs = advperi
+    print("Bridge from Advanced Peripherals found!")
+end
 
 if (not rs) then
-    print("[ERROR]: No refined storage Peripheral found. Place computer next to an refinedstorage4computercraft:peripheral.")
+    print("[ERROR]: No Refined Storage Peripheral found. Place computer next to an advancedperipherals:rs_bridge.")
     error()
     return false
 end
@@ -63,9 +77,13 @@ while(true) do
         a = {}
         k = "name"
         a[k] = craft["fullName"]
-        if(rs.hasPattern(a)) then
-            local rsStack = rs.getItem(a)
-            local rsStackCount = tonumber(rsStack["count"])
+        -- rs.getPattern({ ["name"] = "minecraft:charcoal"})
+        -- if(rs.hasPattern(a)) then
+        if(rs.getPattern({ ["name"] = a})) then
+            -- local rsStack = rs.getItem(a)
+            local rsStack = rs.getItem({ ["name"] = a})
+            -- local rsStackCount = tonumber(rsStack["count"])
+            local rsStackCount = tonumber(rsStack["amount"])
             local toCraft = tonumber(craft["count"])
 
             if(rsStack["count"]) then
@@ -75,15 +93,15 @@ while(true) do
             if(toCraft ~= 0) then
                 if(toCraft > 0) then
 
-                    AlreadyCrafting = false
-                    local currentTasks = rs.getTasks()
-                    for k,v in pairs(currentTasks) do
-                        -- print(v.stack.item.name)
-                        if v.stack.item.name == craft["fullName"] then
-                            -- print(v.stack.item.name)
-                            AlreadyCrafting = true
-                        end
-                    end
+                    AlreadyCrafting = rs.isItemCrafting({ ["name"] = a})
+                    -- local currentTasks = rs.isItemCrafting({ ["name"] = a})
+                    -- for k,v in pairs(currentTasks) do
+                    --     -- print(v.stack.item.name)
+                    --     if v.stack.item.name == craft["fullName"] then
+                    --         -- print(v.stack.item.name)
+                    --         AlreadyCrafting = true
+                    --     end
+                    -- end
 
                     if AlreadyCrafting == false then
                         print("Crafting: " .. toCraft, craft["fullName"] .. "\n")
